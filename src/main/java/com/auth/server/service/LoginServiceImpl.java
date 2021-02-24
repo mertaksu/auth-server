@@ -30,7 +30,7 @@ public class LoginServiceImpl implements LoginService {
         if(user==null) {
             throw new UsernameNotFoundException("Username: "+loginRequest.getUsername()+" not found");
         } else {
-            if(!passwordEncoder.matches(user.getUserPass(),loginRequest.getPassword())) {
+            if(!passwordEncoder.matches(loginRequest.getPassword(),user.getUserPass())) {
                 throw new BadCredentialsException("Invalid password for user: "+loginRequest.getUsername());
             } else {
                 token = jwtService.tokenFor(user.getUserName(),"BASIC_ROLE");
