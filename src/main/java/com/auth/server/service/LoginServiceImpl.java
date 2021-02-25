@@ -33,7 +33,7 @@ public class LoginServiceImpl implements LoginService {
             if(!passwordEncoder.matches(loginRequest.getPassword(),user.getUserPass())) {
                 throw new BadCredentialsException("Invalid password for user: "+loginRequest.getUsername());
             } else {
-                token = jwtService.tokenFor(user.getUserName(),"BASIC_ROLE");
+                token = jwtService.tokenFor(user.getUsername(),"BASIC_ROLE");
             }
         }
         return token;
