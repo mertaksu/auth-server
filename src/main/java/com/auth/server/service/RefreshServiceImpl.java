@@ -6,16 +6,18 @@ import com.auth.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Service
 public class RefreshServiceImpl implements RefreshService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     public String refreshToken(RefreshTokenRequest refreshTokenRequest) {
 
-        User user = userRepository.findByUserName(refreshTokenRequest.getUserName());
+        User user = (User) userService.loadUserByUsername(refreshTokenRequest.getUserName());
         return null;
     }
 }

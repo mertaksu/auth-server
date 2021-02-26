@@ -15,12 +15,14 @@ public class RegisterServiceImpl implements RegisterService {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final UserService userService;
+
     private final UserRepository userRepository;
 
     @Override
     public Boolean register(RegisterRequest registerRequest) throws ConfirmedPasswordNotEqualsException, UserAlreadyExistException {
         try {
-            User foundUser = userRepository.findByUserName(registerRequest.getUsername());
+            User foundUser = (User) userService.loadUserByUsername(registerRequest.getUsername());
             if (!registerRequest.getPassword().equals(registerRequest.getConfirmPassword()))
                 throw new ConfirmedPasswordNotEqualsException("Confirmed password not equals");
             else if(foundUser!=null) {

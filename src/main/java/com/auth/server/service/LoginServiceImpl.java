@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 @Service
 public class LoginServiceImpl implements LoginService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -26,7 +26,7 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public String login(LoginRequest loginRequest) throws IOException, URISyntaxException {
         String token;
-        User user = userRepository.findByUserName(loginRequest.getUsername());
+        User user = (User) userService.loadUserByUsername(loginRequest.getUsername());
         if(user==null) {
             throw new UsernameNotFoundException("Username: "+loginRequest.getUsername()+" not found");
         } else {
