@@ -5,18 +5,20 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "USERS")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue
+    @Column(unique = true, nullable = false)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "USER_NAME")
@@ -31,18 +33,14 @@ public class User implements UserDetails {
     @Column(name = "USER_PASS")
     private String userPass;
 
-    @ManyToMany
-    @JoinTable(
-            name = "USER_ROLE",
-            joinColumns = @JoinColumn(
-                    name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<UserRole> roles;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles;
+        List<Privilege> privileges = new ArrayList<>();
+        roles.forEach(role -> privileges.addAll(role.getPrivileges()));
+        return privileges;
     }
 
     @Override
@@ -57,17 +55,17 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override

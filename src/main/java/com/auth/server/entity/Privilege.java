@@ -1,20 +1,22 @@
 package com.auth.server.entity;
 
 import lombok.Data;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Collection;
 
 @Data
 @Table(name = "PRIVILEGE")
 @Entity
-public class Privilege {
+public class Privilege implements GrantedAuthority {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String authority;
 
-    @ManyToMany(mappedBy = "privileges")
-    private Collection<UserRole> roles;
+    @Override
+    public String getAuthority() {
+        return authority;
+    }
 }

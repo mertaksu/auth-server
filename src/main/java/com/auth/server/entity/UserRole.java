@@ -9,30 +9,15 @@ import java.util.Collection;
 @Table(name = "USER_ROLE")
 @Entity
 @Data
-public class UserRole implements GrantedAuthority {
+public class UserRole {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     private String name;
 
-    @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
 
-    @ManyToMany
-    @JoinTable(
-            name = "PRIVILEGE",
-            joinColumns = @JoinColumn(
-                    name = "role_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(
-                    name = "privilege_id", referencedColumnName = "id"))
+    @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Privilege> privileges;
-
-    @Override
-    public String getAuthority() {
-        StringBuilder authority = new StringBuilder();
-        privileges.stream().findAny().ifPresent(privilege -> authority.append(privilege.getName()));
-        return authority.toString();
-    }
 }
