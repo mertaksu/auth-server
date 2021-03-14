@@ -1,5 +1,6 @@
 package com.auth.server.service;
 
+import com.auth.server.entity.Privilege;
 import com.auth.server.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +26,7 @@ public class AuthorityService implements IAuthorityService {
     }
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities(Collection<UserRole> roles) {
+    public List<GrantedAuthority> getAuthorities(List<UserRole> roles) {
         return getGrantedAuthorities(privilegeService.getPrivileges(roles));
     }
 }

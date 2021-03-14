@@ -1,12 +1,10 @@
 package com.auth.server.entity;
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @NoArgsConstructor
@@ -34,10 +32,10 @@ public class User implements UserDetails {
     private String userPass;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<UserRole> roles;
+    private List<UserRole> roles;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public List<Privilege> getAuthorities() {
         List<Privilege> privileges = new ArrayList<>();
         roles.forEach(role -> privileges.addAll(role.getPrivileges()));
         return privileges;

@@ -1,7 +1,7 @@
 package com.auth.server.service;
 
 import com.auth.server.entity.User;
-import com.auth.server.repository.RoleRepository;
+import com.auth.server.entity.UserRole;
 import com.auth.server.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,18 +17,21 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    private final RoleRepository roleRepository;
-
     private final IAuthorityService authorityService;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByUserName(userName);
+        Optional<User> foundUser = userRepository.findByUserName(userName);
 
-        return user.map(value -> new org.springframework.security.core.userdetails.User(
-                value.getUsername(), value.getPassword(), true, true, true, true,
-                authorityService.getAuthorities(Collections.singletonList(roleRepository.findByName("ROLE_USER"))))).orElseGet(() -> new org.springframework.security.core.userdetails.User(
-                " ", " ", true, true, true, true,
-                authorityService.getAuthorities(Collections.singletonList(roleRepository.findByName("ROLE_USER")))));
+        return foundUser.map(user -> new org.springframework.security.core.userdetails.User(
+                user.getUsername(), user.getPassword(), user.isEnabled(), user.isAccountNonExpired(), user.isAccountNonExpired(), user.isAccountNonLocked(),
+                authorityService.getAuthorities(getRolesOfUser(userName)))).orElseThrow(() -> new UsernameNotFoundException(userName));
+    }
+
+    private List<UserRole> getRolesOfUser(String userName) {
+        Optional<User> user = userRepository.findByUserName(userName);
+        if(user!=null && user.isPresent())
+            return user.get().getRoles();
+        else return null;
     }
 }

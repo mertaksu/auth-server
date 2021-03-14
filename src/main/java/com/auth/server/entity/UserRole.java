@@ -1,10 +1,8 @@
 package com.auth.server.entity;
 
 import lombok.Data;
-import org.springframework.security.core.GrantedAuthority;
-
 import javax.persistence.*;
-import java.util.Collection;
+import java.util.List;
 
 @Table(name = "USER_ROLE")
 @Entity
@@ -17,7 +15,6 @@ public class UserRole {
 
     private String name;
 
-
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Privilege> privileges;
+    private List<Privilege> privileges;
 }

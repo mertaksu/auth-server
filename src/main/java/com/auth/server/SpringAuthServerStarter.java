@@ -12,6 +12,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.security.authentication.AccountStatusUserDetailsChecker;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.transaction.Transactional;
@@ -58,6 +59,7 @@ public class SpringAuthServerStarter implements
             UserRole adminRole = roleRepository.findByName("ROLE_ADMIN");
             User user = new User();
             user.setUserName("test");
+            System.out.println("PasswordEncoder:"+passwordEncoder.hashCode());
             user.setUserPass(passwordEncoder.encode("test"));
             user.setUserEmail("test@test.com");
             user.setRoles(Collections.singletonList(adminRole));

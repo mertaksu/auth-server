@@ -3,8 +3,8 @@ package com.auth.server.service;
 import com.auth.server.entity.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface IAuthorityService {
-    Collection<? extends GrantedAuthority> getAuthorities(Collection<UserRole> roles);
+    List<GrantedAuthority> getAuthorities(List<UserRole> roles);
 }

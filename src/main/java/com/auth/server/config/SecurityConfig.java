@@ -1,34 +1,37 @@
 package com.auth.server.config;
 
-import com.auth.server.security.JwtAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import com.auth.server.security.CustomAuthenticationManager;
+import com.auth.server.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-
+@RequiredArgsConstructor
+@Order(2)
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtAuthenticationProvider jwtAuthenticationProvider;
+    private final UserService userService;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+    private final CustomAuthenticationManager customAuthenticationManager;
 
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(jwtAuthenticationProvider);
+        auth.parentAuthenticationManager(customAuthenticationManager).userDetailsService(userService);
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf().disable().formLogin()
+                .and()
+                .authorizeRequests().antMatchers("/oauth/token").permitAll()
+                .anyRequest().authenticated();
+
+        /*
         http.csrf().ignoringAntMatchers("/login");
         http.csrf().ignoringAntMatchers("/refresh");
         http.csrf().ignoringAntMatchers("/register");
@@ -38,5 +41,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/login").permitAll().antMatchers("/refresh").permitAll()
                 .antMatchers("/register").permitAll()
         ;
+        */
     }
 }
