@@ -1,5 +1,6 @@
 package com.auth.server.config;
 
+import com.auth.server.security.CustomTokenEnhancer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
@@ -13,19 +14,19 @@ import java.security.KeyPair;
 public class JwtConfiguration {
 
     @Bean
-    public JwtTokenStore jwtTokenStore(JwtAccessTokenConverter jwtAccessTokenConverter) {
-        return new JwtTokenStore(jwtAccessTokenConverter);
-    }
-
-    @Bean
-    public JwtAccessTokenConverter jwtAccessTokenConverter(KeyPair keyPair) {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setKeyPair(keyPair);
-        return jwtAccessTokenConverter;
+    public JwtTokenStore jwtTokenStore(JwtAccessTokenConverter tokenEnhancer) {
+        return new JwtTokenStore(tokenEnhancer);
     }
 
     @Bean
     public KeyPair keyPair() {
         return new KeyStoreKeyFactory(new ClassPathResource("astrolab.keystore"),"1234Aa".toCharArray()).getKeyPair("astrolab");
+    }
+
+    @Bean
+    public JwtAccessTokenConverter tokenEnhancer() {
+        JwtAccessTokenConverter converter = new CustomTokenEnhancer();
+        converter.setKeyPair(keyPair());
+        return converter;
     }
 }

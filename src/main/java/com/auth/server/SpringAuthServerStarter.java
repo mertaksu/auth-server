@@ -43,8 +43,7 @@ public class SpringAuthServerStarter implements
     public void onApplicationEvent(ContextRefreshedEvent event) {
 
         if (alreadySetup) {
-            Optional<User> user = userRepository.findByUserName("test");
-            user.ifPresent(value -> System.out.println(value.getAuthorities()));
+            User user = userRepository.findByUserName("test");
         } else {
             Privilege readPrivilege
                     = createPrivilegeIfNotFound("READ_PRIVILEGE");
@@ -65,8 +64,7 @@ public class SpringAuthServerStarter implements
             user.setRoles(Collections.singletonList(adminRole));
             user.setUserGsm("905555555555");
             userRepository.save(user);
-            Optional<User> savedUser = userRepository.findByUserName("test");
-            savedUser.ifPresent(value -> System.out.println(value.getAuthorities()));
+            User savedUser = userRepository.findByUserName("test");
         }
 
     }
@@ -85,7 +83,7 @@ public class SpringAuthServerStarter implements
 
     @Transactional
     void createRoleIfNotFound(
-            String name, Collection<Privilege> privileges) {
+            String name, List<Privilege> privileges) {
 
         UserRole role = roleRepository.findByName(name);
         if (role == null) {

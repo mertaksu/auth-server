@@ -1,6 +1,7 @@
 package com.auth.server.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
@@ -31,6 +32,22 @@ public class User implements UserDetails {
     @Column(name = "USER_PASS")
     private String userPass;
 
+    @Column(name = "IS_ACCOUNT_NON_EXPIRED")
+    @ColumnDefault(value = "true")
+    private boolean isAccountNonExpired;
+
+    @Column(name = "IS_ACCOUNT_NON_LOCKED")
+    @ColumnDefault(value = "true")
+    private boolean isAccountNonLocked;
+
+    @Column(name = "IS_CREDENTIALS_NON_EXPIRED")
+    @ColumnDefault(value = "true")
+    private boolean isCredentialsNonExpired;
+
+    @Column(name = "IS_ENABLED")
+    @ColumnDefault(value = "true")
+    private boolean isEnabled;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
 
@@ -53,21 +70,21 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return isAccountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return isAccountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return isCredentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }
