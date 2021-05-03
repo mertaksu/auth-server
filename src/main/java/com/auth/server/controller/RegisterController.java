@@ -6,11 +6,13 @@ import com.auth.server.pojo.RegisterRequest;
 import com.auth.server.service.RegisterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,6 +22,9 @@ import javax.validation.Valid;
 public class RegisterController {
 
     private final RegisterService registerService;
+
+    @Qualifier("authenticationManagerBean")
+    private final AuthenticationManager authenticationManager;
 
     @RequestMapping(path = "/register",method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest registerRequest) {
@@ -34,4 +39,27 @@ public class RegisterController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+
+    /*
+     Custom Login controller
+
+        @RequestMapping(path = "/login",method = RequestMethod.GET)
+        public ResponseEntity<String> login() {
+            try {
+                Authentication authentication = authenticationManager.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                "test",
+                                "test2"
+                        )
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return ResponseEntity.ok("OK");
+            } catch (Exception e) {
+                log.error("Error",e);
+                return ResponseEntity.ok("FAIL");
+            }
+        }
+     */
 }

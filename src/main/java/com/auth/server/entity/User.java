@@ -1,5 +1,6 @@
 package com.auth.server.entity;
 
+import com.auth.server.pojo.AuthenticationProvider;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,6 +51,10 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "AUTH_PROVIDER")
+    private AuthenticationProvider authenticationProvider;
 
     @Override
     public List<Privilege> getAuthorities() {
