@@ -13,7 +13,7 @@ Request:
 ```curl
 curl -X POST \
   http://localhost:8080/auth-server/login \
-  -H 'authorization: Basic VVNFUl9DTElFTlRfQVBQOnRlc3Q=' --> Basic auth user
+  -H 'authorization: Basic VVNFUl9DTElFTlRfQVBQOnRlc3Q=' --> Basic auth user info
   -H 'cache-control: no-cache'
   -H 'content-type: application/x-www-form-urlencoded'
   -d 'username=test&password=test&grant_type=password'
