@@ -12,6 +12,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
+import org.springframework.security.oauth2.common.OAuth2AccessToken;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -23,8 +27,13 @@ public class RegisterController {
 
     private final RegisterService registerService;
 
+    int a;
+
     @Qualifier("authenticationManagerBean")
     private final AuthenticationManager authenticationManager;
+
+    @Qualifier("tokenEnhancer")
+    private final JwtAccessTokenConverter jwtAccessTokenConverter;
 
     @RequestMapping(path = "/register",method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     public ResponseEntity<String> register(@RequestBody @Valid RegisterRequest registerRequest) {
@@ -38,6 +47,13 @@ public class RegisterController {
             log.error("Exception ",e);
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @GetMapping(path = "/oauth2/callback/facebook")
+    public ResponseEntity<DefaultOAuth2AccessToken> facebookLogin(@RequestParam String code,@RequestParam String state) {
+
+        DefaultOAuth2AccessToken customAccessToken = new DefaultOAuth2AccessToken(code);
+        return ResponseEntity.ok().body(customAccessToken);
     }
 
 

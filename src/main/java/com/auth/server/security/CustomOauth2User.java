@@ -1,10 +1,12 @@
 package com.auth.server.security;
 
+import com.auth.server.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -25,5 +27,9 @@ public class CustomOauth2User implements OAuth2User {
     @Override
     public String getName() {
         return oAuth2User.getName();
+    }
+
+    public String getEmail() {
+        return (String) this.getAttributes().get("email");
     }
 }
