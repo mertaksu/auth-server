@@ -1,4 +1,4 @@
-# auth-server
+# Auth-Server
 Common Authentication &amp; Authorization server for all microservices.
 
 With this project we can integrate oauth2 authentication feature to microservices. When you call following api you can get a response json.
@@ -61,4 +61,4 @@ Response:
 
 Also you can use facebook login feature
 
-When you open [url](http://localhost:8080/login) in browser and click Facebook link. After you will redirect facebook authentication page. If you successfully authenticateyou receive a access bearer token from facebook 
+When you open [login url](http://localhost:8080/login) in browser and click Facebook link. After you will redirect facebook authentication page. If you successfully authenticateyou receive a access bearer token from facebook 
