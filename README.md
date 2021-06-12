@@ -1,7 +1,7 @@
 # Auth-Server
 Common Authentication &amp; Authorization server for all microservices.
 
-With this project we can integrate oauth2 authentication feature to microservices. When you call following api you can get a response json.
+With this project we can integrate oauth2 authentication feature to microservices. When you call following api you can get jwt tokens. This token have a expiration time. When token expire, call with refresh token and grant type(refresh_token) for generate new jwt token
 
 You have to call this api with basic authentication info like;
 username: USER_CLIENT_APP
