@@ -49,11 +49,20 @@ public class SpringAuthServerStarter implements
                     = createPrivilegeIfNotFound("READ_PRIVILEGE");
             Privilege writePrivilege
                     = createPrivilegeIfNotFound("WRITE_PRIVILEGE");
+            Privilege deletePrivilege
+                    = createPrivilegeIfNotFound("DELETE_PRIVILEGE");
 
             List<Privilege> adminPrivileges = Arrays.asList(
-                    readPrivilege, writePrivilege);
+                    readPrivilege, writePrivilege, deletePrivilege);
+
+            List<Privilege> updateablePrivilege = Arrays.asList(readPrivilege,writePrivilege);
+
+            List<Privilege> deleteablePrivilege = Arrays.asList(readPrivilege,deletePrivilege);
+
             createRoleIfNotFound("ROLE_ADMIN", adminPrivileges);
-            createRoleIfNotFound("ROLE_USER", Collections.singletonList(readPrivilege));
+            createRoleIfNotFound("ROLE_USER_READ_ONLY", Collections.singletonList(readPrivilege));
+            createRoleIfNotFound("ROLE_USER_UPDATEABLE", updateablePrivilege);
+            createRoleIfNotFound("ROLE_USER_DELETEABLE", deleteablePrivilege);
 
             UserRole adminRole = roleRepository.findByName("ROLE_ADMIN");
             User user = new User();
@@ -64,7 +73,37 @@ public class SpringAuthServerStarter implements
             user.setRoles(Collections.singletonList(adminRole));
             user.setUserGsm("905555555555");
             userRepository.save(user);
-            User savedUser = userRepository.findByUserName("test");
+
+            UserRole readonlyRole = roleRepository.findByName("ROLE_USER_READ_ONLY");
+            User user2 = new User();
+            user2.setUserName("test2");
+            System.out.println("PasswordEncoder:"+passwordEncoder.hashCode());
+            user2.setUserPass(passwordEncoder.encode("test2"));
+            user2.setUserEmail("test2@test.com");
+            user2.setRoles(Collections.singletonList(readonlyRole));
+            user2.setUserGsm("905555555555");
+            userRepository.save(user2);
+
+            UserRole updateableRole = roleRepository.findByName("ROLE_USER_UPDATEABLE");
+            User user3 = new User();
+            user3.setUserName("test3");
+            System.out.println("PasswordEncoder:"+passwordEncoder.hashCode());
+            user3.setUserPass(passwordEncoder.encode("test3"));
+            user3.setUserEmail("test3@test.com");
+            user3.setRoles(Collections.singletonList(updateableRole));
+            user3.setUserGsm("905555555555");
+            userRepository.save(user3);
+
+            UserRole deleteableRole = roleRepository.findByName("ROLE_USER_DELETEABLE");
+            User user4 = new User();
+            user4.setUserName("test4");
+            System.out.println("PasswordEncoder:"+passwordEncoder.hashCode());
+            user4.setUserPass(passwordEncoder.encode("test4"));
+            user4.setUserEmail("test4@test.com");
+            user4.setRoles(Collections.singletonList(deleteableRole));
+            user4.setUserGsm("905555555555");
+            userRepository.save(user4);
+
         }
 
     }

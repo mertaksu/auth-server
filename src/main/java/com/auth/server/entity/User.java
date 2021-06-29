@@ -33,28 +33,24 @@ public class User implements UserDetails {
     @Column(name = "USER_PASS")
     private String userPass;
 
-    @Column(name = "IS_ACCOUNT_NON_EXPIRED")
-    @ColumnDefault(value = "true")
-    private boolean isAccountNonExpired;
+    @Column(name = "IS_ACCOUNT_NON_EXPIRED",columnDefinition = "boolean default true")
+    private boolean isAccountNonExpired=true;
 
-    @Column(name = "IS_ACCOUNT_NON_LOCKED")
-    @ColumnDefault(value = "true")
-    private boolean isAccountNonLocked;
+    @Column(name = "IS_ACCOUNT_NON_LOCKED",columnDefinition = "boolean default true")
+    private boolean isAccountNonLocked=true;
 
-    @Column(name = "IS_CREDENTIALS_NON_EXPIRED")
-    @ColumnDefault(value = "true")
-    private boolean isCredentialsNonExpired;
+    @Column(name = "IS_CREDENTIALS_NON_EXPIRED",columnDefinition = "boolean default true")
+    private boolean isCredentialsNonExpired=true;
 
-    @Column(name = "IS_ENABLED")
-    @ColumnDefault(value = "true")
-    private boolean isEnabled;
+    @Column(name = "IS_ENABLED",columnDefinition = "boolean default true")
+    private boolean isEnabled=true;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRole> roles;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "AUTH_PROVIDER")
-    private AuthenticationProvider authenticationProvider;
+    private AuthenticationProvider authenticationProvider = AuthenticationProvider.LOCAL;
 
     @Override
     public List<Privilege> getAuthorities() {
